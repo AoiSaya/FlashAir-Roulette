@@ -2,9 +2,11 @@
 
 ## Overview
 
-This software was developed for FlashAir-Roulette kit.  
-The roulette kit was provided as an extra bonus when FlashAir was purchased at Maker Fair Tokyo.  
- [About FlashAir Roulette](https://flashair-developers.com/ja/about/events/makerfaire2018tokyo/)
+I developed and released softwere for FlashAir-Roulette.
+This roulette was designed as FlashAir hands‐on experience for kids.  
+And the parts kit provided as an extra bonus when FlashAir was purchased at Maker Fair Tokyo 2018.  
+The parts and circuit diagrams are available from the following site.  
+ [FlashAir Developers .. Maker Fair Tokyo 2018](https://flashair-developers.com/ja/about/events/makerfaire2018tokyo/)
 
 ![Roullete](https://github.com/AoiSaya/FlashAir-Roulette/blob/master/img/Roulette.png)
 
