@@ -3,7 +3,7 @@
 ## Overview
 
 I developed and released softwere for FlashAir-Roulette.  
-This roulette was designed as FlashAir hands‐on experience for kids.  
+This roulette was designed as FlashAir hands‐on experience for kids & students.  
 And the parts kit provided as an extra bonus when FlashAir was purchased at Maker Fair Tokyo 2018.  
 
 The parts list and circuit diagrams are available from the following site.  
@@ -28,18 +28,19 @@ Incidentally, /SD_WLAN is a hidden folder,　so let's use a tool that can handle
 
 ## How to play
 
-**1. Roulette**    
+game1.lua: **Roulette**    
 Power on without pressing anything. After about 5 seconds, the No.1 LED lights up.
 
-**2. Two LED roulette**  
+game2.lua: **Two LED roulette**  
 Turn on the power while holding down the A button, and release the No.2 LED lights up.
 
-**3. Demonstlation lit**  
+game3.lua: **Demonstlation lit**  
 Hold down the B button and turn on the power, and release the No.3 LED lights up.
 
-**4. Wi-Fi detector**  
-Hold down the A and B buttons and turn on the power, then release the No.4 LED lights up.
-Scan the surrounding AP and display the strongest one. 8 is the maximum, 1 is the minimum.
+game4.lua: **Wi-Fi detector**  
+Hold down the A and B buttons and turn on the power, then release the No.4 LED lights up.  
+It periodically scans surrounding APs and displays the maximum received power.  
+8 is the maximum, 1 is the minimum.
 
 ## Licence
 
