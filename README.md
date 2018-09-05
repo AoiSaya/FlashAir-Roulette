@@ -9,7 +9,7 @@ And the parts kit provided as an extra bonus when FlashAir was purchased at Make
 The parts list and circuit diagrams are available from the following site.  
  [FlashAir Developers .. Maker Fair Tokyo 2018](https://flashair-developers.com/ja/about/events/makerfaire2018tokyo/)
 
-<img src="img/Roulette.png" width="400">
+<img src="https://raw.githubusercontent.com/AoiSaya/FlashAir-Roulette/master/img/Roulette.png" width="400">
 
 ## Requirement
 
