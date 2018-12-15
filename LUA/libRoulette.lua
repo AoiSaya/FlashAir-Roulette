@@ -1,7 +1,7 @@
 -----------------------------------------------
 -- function libraly for FlashAir Roulette
 -- under the BSD-2-Clause, Copyright 2018 AoiSaya
--- 2018/12/14 rev.0.07
+-- 2018/12/15 rev.0.08
 -----------------------------------------------
 if _libRoulette_ then
   return
@@ -98,89 +98,115 @@ function getMMLcmd(mml,i)
   if opt=="+" or opt=="-" then
 	cmd = cmd..opt
 	i = i+1
-  else if opt=="#" then
+  elseif opt=="#" then
 	cmd = cmd.."+"
 	i = i+1
   end
   val = 0
-  dot = val
+  dot = 0
   num = 0
-  while 1 do
+  while noBreak() do
 	i = i+1
 	opt = mml:sub(i,i)
 	num = tonumber(opt)
 	if opt=="." then
-	  dot = dot/2; val = 1/(1/val+dot)
-	else if num>0
-	  val = val*10+num; dot = 1/val
+	  dot = dot*2; val = 1/(1/val+1/dot)
+	elseif num then
+	  val = val*10+num; dot = val
 	else
 	  break
 	end
   end
 
-  return(cmd,val,i)
+  return cmd,val,i
 end
 
 ------------------------------------------------
--- MMLを演奏する関数
---	 Abutton,Bbutton = lightPlay(music)
+-- BEEPを発生する関数
+--	  beep(ctrl,data,period,num)
 -- 引数
--- music: MML文字列
+-- ctrl: fa.spiと同じ
+-- data: fa.spiと同じ
+-- period: fa.spiと同じ
+-- num: 音の長さ
+-- 戻り値なし
+------------------------------------------------
+function beep(ctrl,data,period,num)
+	local wav = string.rep('\x55', num)
+
+	fa.spi("mode",0)
+	fa.spi("bit",2)
+	fa.spi("init",period)
+	fa.pio(ctrl,data)
+	fa.spi("write",wav)
+	wav=""
+	collectgarbage()
+end
+------------------------------------------------
+-- MMLを演奏する関数
+--	 Abutton,Bbutton = lightPlay(mml,speed,ratio)
+-- 引数
+-- mml: MML文字列
+-- speed: スピード調整
+-- ratio: 音符の長さ中の発音時間の比率
 -- 戻り値はどちらも 1:ボタンを押している、0:ボタンを押してない
 -- 使い方：
 --	 Abutton,Bbutton = lightPlay("C4DEFG")
 ------------------------------------------------
-function lightPlay(music)
-  local n, i, cmd, val, frq, period, number
-  local ctrl, data, num, wait, wav
-  local Abutton,Bbutton
-  local oct = 4
-  local noc = oct
-  local len = 4
+function lightPlay(mml,speed,ratio)
+	local n, i, cmd, val, frq, period, number
+	local ctrl, data, num, wait, wav
+	local Abutton,Bbutton
+	local oct = 4
+	local noc = oct
+	local len = 4
+	local tmp = 80
 
 local ptbl={} -- spi periad table
+ptbl["r"]  =  0
 ptbl["c-"] =  72047.6
 ptbl["c"]  =  68002.7
 ptbl["c+"] =  64184.8
-ptbl["d-"] =  u["c+"]
+ptbl["d-"] =  ptbl["c+"]
 ptbl["d"]  =  60581.2
 ptbl["d+"] =  57179.9
-ptbl["e-"] =  u["d+"]
+ptbl["e-"] =  ptbl["d+"]
 ptbl["e"]  =  53969.4
-ptbl["e+"] =  u["f"]
-ptbl["f-"] =  u["e"]
+ptbl["e+"] =  ptbl["f"]
+ptbl["f-"] =  ptbl["e"]
 ptbl["f"]  =  50939.3
 ptbl["f+"] =  48079.1
-ptbl["g-"] =  u["f+"]
+ptbl["g-"] =  ptbl["f+"]
 ptbl["g"]  =  45379.5
 ptbl["g+"] =  42831.2
-ptbl["a-"] =  u["g+"]
+ptbl["a-"] =  ptbl["g+"]
 ptbl["a"]  =  40426.2
 ptbl["a+"] =  38156.0
-ptbl["b-"] =  u["a+"]
+ptbl["b-"] =  ptbl["a+"]
 ptbl["b"]  =  36013.3
 ptbl["b+"] =  33990.9
 
 local ftbl={} -- target frequency table
+ftbl["r"]  = 0
 ftbl["c-"] = 246.942
 ftbl["c"]  = 261.626
 ftbl["c+"] = 277.183
-ftbl["d-"] = f["c+"]
+ftbl["d-"] = ftbl["c+"]
 ftbl["d"]  = 293.665
 ftbl["d+"] = 311.127
-ftbl["e-"] = f["d+"]
+ftbl["e-"] = ftbl["d+"]
 ftbl["e"]  = 329.628
-ftbl["e+"] = f["f"]
-ftbl["f-"] = f["e"]
+ftbl["e+"] = ftbl["f"]
+ftbl["f-"] = ftbl["e"]
 ftbl["f"]  = 349.228
 ftbl["f+"] = 369.994
-ftbl["g-"] = f["f+"]
+ftbl["g-"] = ftbl["f+"]
 ftbl["g"]  = 391.995
 ftbl["g+"] = 415.305
-ftbl["a-"] = f["g+"]
+ftbl["a-"] = ftbl["g+"]
 ftbl["a"]  = 440.000
 ftbl["a+"] = 466.164
-ftbl["b-"] = f["a+"]
+ftbl["b-"] = ftbl["a+"]
 ftbl["b"]  = 493.883
 ftbl["b+"] = 523.251
 
@@ -206,6 +232,7 @@ ltbl["a+"] = 2
 ltbl["b-"] = 1
 ltbl["b"]  = 1
 ltbl["b+"] = 1
+ltbl["r"]  = 0
 
 local ctbl={} -- command table
 ctbl[" "] = function(v) end
@@ -216,35 +243,55 @@ ctbl["~"] = function(v) noc = oct+1; end
 ctbl["_"] = function(v) noc = oct-1; end
 ctbl["l"] = function(v) len = v; end
 ctbl["t"] = function(v) tmp = v; end
+ctbl["n"] = function(v) tmp = v; end
+-- not support
+ctbl["["] = function(v) end
+ctbl["]"] = function(v) end
+ctbl["*"] = function(v) end
+ctbl["@"] = function(v) end
+ctbl["&"] = function(v) end
+ctbl["n"] = function(v) end
+ctbl["m"] = function(v) end
+ctbl["p"] = function(v) end
+ctbl["q"] = function(v) end
+ctbl["s"] = function(v) end
+ctbl["v"] = function(v) end
+ctbl["y"] = function(v) end
+--
 
-  music = music:lower()
-  n = #music
-  i = 1
-  number = 0
-  Abutton,Bbutton = light(number)
-
-  while noBreak() and i<n and Abutton==0 and Bbutton==0 do
-	cmd, val, i = get_cmd(music,i)
-	frq = ftbl[cmd]
-	if frq!=nil then
-		period = ptbl[cmd]
-		number = ltbl[cmd]
-		ctrl = 0x1C
-		data = number*4
-		if val==0 then val = 1/len end
-		num  = frq*val/tmp/2
-		wait = 1000/val/tmp/2
-		wav = string.rep('\xAA', num/4)
-
-		fa.spi("mode",0)
-		fa.spi("init",period)
-		fa.pio(ctrl, data)
-		fa.spi("write",wav)
-		sleep(wait)
-	else
-	  ctbl[cmd](val)
-	end
+	mml = mml:lower()
+	n = #mml
+	i = 1
+	number = 0
 	Abutton,Bbutton = light(number)
-  end
-  return Abutton,Bbutton
+
+-- while noBreak() and i<=n do
+	while noBreak() and i<=n and Abutton==0 and Bbutton==0 do
+		cmd, val, i = getMMLcmd(mml,i)
+		frq = ftbl[cmd]
+		if frq~=nil then
+			if val==0 then val=len end
+			period = ptbl[cmd]*speed/2^(oct-4)
+			num  = 4*60*frq*2^(oct-4)*speed*ratio/(val*tmp)-2
+			wait = 4*60*1000*(1-ratio)/(val*tmp)-3
+			if num <1 then num =1 end
+			if wait<1 then wait=1 end
+			number = ltbl[cmd]
+			ctrl = 0x1f
+			data = number*4
+			if cmd~="r" then
+				beep(ctrl,data,period,num)
+			else
+				Abutton,Bbutton = light(number)
+				sleep(wait)
+			end
+			Abutton,Bbutton = light(number)
+			sleep(wait)
+		else
+			ctbl[cmd](val)
+		end
+	end
+	return Abutton,Bbutton
 end
+
+collectgarbage()
