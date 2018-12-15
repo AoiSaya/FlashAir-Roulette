@@ -1,8 +1,7 @@
-Under constructions
-
 # FlashAir-Roulette
 
 ## Overview
+Update at 2018/12/16: Release tiny MML player function and Xmas music player.
 
 I developed and released softwere for FlashAir-Roulette.  
 This roulette was designed as FlashAir hands‐on experience for kids & students.  
@@ -40,9 +39,14 @@ game3.lua: **Demonstlation lit**
 Hold down the B button and turn on the power, and release the No.3 LED lights up.
 
 game4.lua: **Wi-Fi detector**  
-Hold down the A and B buttons and turn on the power, then release the No.4 LED lights up.  
+Hold down the A and B buttons and turn on the power, then release A button the No.4 LED lights up.  
 It periodically scans surrounding APs and displays the maximum received power.  
 8 is the maximum, 1 is the minimum.
+
+Xmas1.lua: **Xmas music player**  
+Hold down the A and B buttons and turn on the power, then release B button the No.4 LED lights up.  
+A button：replay and change ratio of sound.
+B button: next music.
 
 ## Licence
 
