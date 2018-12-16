@@ -38,7 +38,7 @@ PROLTNV
 
 Volume is supported 2 levels. V>=12 or not.   
 
-cf. https://en.wikipedia.org/wiki/Music_Macro_Language
+cf. Modern MML https://en.wikipedia.org/wiki/Music_Macro_Language
 
 ## How to play
 
