@@ -132,16 +132,16 @@ end
 -- 戻り値なし
 ------------------------------------------------
 function beep(ctrl,data,period,num,vol)
-    local wav
-    
-    if vol>=12 then
-    	wav = string.rep('\x55', num)
-    else
+	local wav
+
+	if vol>=12 then
+		wav = string.rep('\x55', num)
+	else
 		period=period*2
-    	wav = string.rep('\xFF', num/2)
+		wav = string.rep('\xFF', num/2)
 	end
 
-    fa.spi("mode",0)
+	fa.spi("mode",0)
 	fa.spi("bit",2)
 	fa.spi("init",period)
 	fa.pio(ctrl,data)
@@ -291,6 +291,9 @@ ctbl["y"] = function(v) end
 		cmd, val, i = getMMLcmd(mml,i)
 		if cmd=="n" then
 			ctbl[cmd](val)
+		end
+		if cmd=="p" then
+			cmd = "r"
 		end
 		frq = ftbl[cmd]
 		if frq~=nil then

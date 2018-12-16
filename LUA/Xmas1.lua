@@ -56,7 +56,7 @@ while noBreak() do -- FTLE(FlashTools Lua Editor)のBreakで止められる
 	Abutton,Bbutton = lightPlay(music[musicNo],speed,ratio)
 	if Abutton==1 then
 		ratio = (ratio % 1) + 0.2
-    else
+	else
 		musicNo = (musicNo % #music)+1
 	end
 	sleep(500)
