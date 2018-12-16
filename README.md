@@ -27,6 +27,19 @@ Incidentally, /SD_WLAN is a hidden folder,　so let's use a tool that can handle
     LUA_RUN_SCRIPT=/LUA/roulette.lua
     IFMODE=1
 
+## tiny MML player syntax
+
+Case-insensitive
+### support Syntax
+CDEFGAB  
+PROLTNV  
+0123456789.  
++-#<>  
+
+Volume is supported 2 levels. V>=12 or not.   
+
+cf. https://en.wikipedia.org/wiki/Music_Macro_Language
+
 ## How to play
 
 game1.lua: **Roulette**    
