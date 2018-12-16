@@ -29,12 +29,12 @@ elseif Abutton==1 and Bbutton==1 then
 	if Abutton==0 then
 		require "/LUA/game4"
 	else
-	fa.control("fioset", 0)
+		fa.control("fioset", 0)
 		require "/LUA/Xmas1"
 	end
 else
 	fa.control("fioset", 0)
-  require "/LUA/game1"
+	require "/LUA/game1"
 end
 
 return
