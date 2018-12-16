@@ -1,7 +1,7 @@
 -----------------------------------------------
 -- function libraly for FlashAir Roulette
 -- under the BSD-2-Clause, Copyright 2018 AoiSaya
--- 2018/12/15 rev.0.08
+-- 2018/12/16 rev.0.09
 -----------------------------------------------
 if _libRoulette_ then
   return
@@ -131,10 +131,17 @@ end
 -- num: 音の長さ
 -- 戻り値なし
 ------------------------------------------------
-function beep(ctrl,data,period,num)
-	local wav = string.rep('\x55', num)
+function beep(ctrl,data,period,num,vol)
+    local wav
+    
+    if vol>=12 then
+    	wav = string.rep('\x55', num)
+    else
+		period=period*2
+    	wav = string.rep('\xFF', num/2)
+	end
 
-	fa.spi("mode",0)
+    fa.spi("mode",0)
 	fa.spi("bit",2)
 	fa.spi("init",period)
 	fa.pio(ctrl,data)
@@ -160,7 +167,8 @@ function lightPlay(mml,speed,ratio)
 	local oct = 4
 	local noc = oct
 	local len = 4
-	local tmp = 80
+	local tmp = 120
+	local vol = 11.625
 
 local ptbl={} -- spi periad table
 ptbl["r"]  =  0
@@ -210,6 +218,20 @@ ftbl["b-"] = ftbl["a+"]
 ftbl["b"]  = 493.883
 ftbl["b+"] = 523.251
 
+local ntbl={} -- command N table
+ntbl[0] = "c"
+ntbl[1] = "c+"
+ntbl[2] = "d"
+ntbl[3] = "d+"
+ntbl[4] = "e"
+ntbl[5] = "f"
+ntbl[6] = "f+"
+ntbl[7] = "g"
+ntbl[8] = "g+"
+ntbl[9] = "a"
+ntbl[10]= "a+"
+ntbl[11]= "b"
+
 local ltbl={} -- light number
 ltbl["c-"] = 7
 ltbl["c"]  = 7
@@ -243,19 +265,18 @@ ctbl["~"] = function(v) noc = oct+1; end
 ctbl["_"] = function(v) noc = oct-1; end
 ctbl["l"] = function(v) len = v; end
 ctbl["t"] = function(v) tmp = v; end
-ctbl["n"] = function(v) tmp = v; end
+ctbl["n"] = function(v) cmd=ntbl[v%12]; noc=(v-v%12)/12+1; val=0; end
+ctbl["v"] = function(v) vol = v; end
 -- not support
 ctbl["["] = function(v) end
 ctbl["]"] = function(v) end
 ctbl["*"] = function(v) end
 ctbl["@"] = function(v) end
 ctbl["&"] = function(v) end
-ctbl["n"] = function(v) end
 ctbl["m"] = function(v) end
 ctbl["p"] = function(v) end
 ctbl["q"] = function(v) end
 ctbl["s"] = function(v) end
-ctbl["v"] = function(v) end
 ctbl["y"] = function(v) end
 --
 
@@ -268,19 +289,24 @@ ctbl["y"] = function(v) end
 -- while noBreak() and i<=n do
 	while noBreak() and i<=n and Abutton==0 and Bbutton==0 do
 		cmd, val, i = getMMLcmd(mml,i)
+		if cmd=="n" then
+			ctbl[cmd](val)
+		end
 		frq = ftbl[cmd]
 		if frq~=nil then
 			if val==0 then val=len end
-			period = ptbl[cmd]*speed/2^(oct-4)
-			num  = 4*60*frq*2^(oct-4)*speed*ratio/(val*tmp)-2
+			period = ptbl[cmd]*speed/2^(noc-4)
+			num  = 4*60*frq*2^(noc-4)*speed*ratio/(val*tmp)-2
 			wait = 4*60*1000*(1-ratio)/(val*tmp)-3
-			if num <1 then num =1 end
+			if num <2 then num =2 end
 			if wait<1 then wait=1 end
+			noc = oct
+
 			number = ltbl[cmd]
 			ctrl = 0x1f
 			data = number*4
 			if cmd~="r" then
-				beep(ctrl,data,period,num)
+				beep(ctrl,data,period,num,vol)
 			else
 				Abutton,Bbutton = light(number)
 				sleep(wait)
