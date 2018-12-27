@@ -1,7 +1,7 @@
 -----------------------------------------------
 -- Xmas1: melody player for FlashAir Roulette
 -- under the BSD-2-Clause, Copyright 2018 AoiSaya
--- 2018/12/16 rev.0.03
+-- 2018/12/27 rev.0.04
 -----------------------------------------------
 require "/LUA/libRoulette"
 
@@ -49,7 +49,7 @@ until Abutton==0 and Bbutton==0
 speed = 1
 ratio = 0.6
 if fa.websocket==nil then -- W-03 check
-	sleep = 3/4
+	speed = 3/4
 end
 
 while noBreak() do -- FTLE(FlashTools Lua Editor)のBreakで止められる
