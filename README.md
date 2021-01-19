@@ -9,8 +9,15 @@ I developed and released softwere for FlashAir-Roulette.
 This roulette was designed as FlashAir hands‐on experience for kids & students.  
 And the parts kit provided as an extra bonus when FlashAir was purchased at Maker Fair Tokyo 2018.  
 
-The parts list and circuit diagrams are available from the following site.  
- [FlashAir Developers .. Maker Fair Tokyo 2018](https://flashair-developers.com/ja/about/events/makerfaire2018tokyo/)
+~~The parts list and circuit diagrams are available from the following site.  
+ [FlashAir Developers .. Maker Fair Tokyo 2018](https://flashair-developers.com/ja/about/events/makerfaire2018tokyo/)~~
+
+### Tutorial and parts list of roulette
+[ルーレット基板のチュートリアル](manual/FlashAir_Tutorial_Roulette.pdf)  
+
+### Schematic of roulette
+[回路図](manual/flashair_roulette_sch.pdf)  
+
 
 ## Requirement
 
