@@ -23,6 +23,9 @@ And the parts kit provided as an extra bonus when FlashAir was purchased at Make
 ### Schematic of roulette
 [回路図](manual/flashair_roulette_sch.pdf)  
 
+### Sample code
+[サンプルソース](manual/roulette.zip)  
+
   
 ## Requirement
 
